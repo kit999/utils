@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>HTTPS Tester</name>
-  <url>https://github.com/kit999/test-1</url>
+  <url>https://github.com/kit999/utils</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
