@@ -14,7 +14,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 
 /**
- * http://en.wikipedia.org/wiki/Ackerman_function
+ * Super simple HTTPS test client.
  */
 public class HttpsTester {
 	public static void main(String[] argv) {
