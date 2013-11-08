@@ -1,38 +1,50 @@
 /**
- * Ackermann function in Java.
+ * HTTPS tester.
  */
 
 package kit.https;
 
-import java.math.BigInteger;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+
 
 /**
  * http://en.wikipedia.org/wiki/Ackerman_function
  */
 public class HttpsTester {
-	public static int a(int m, int n) {
-		if ((m < 0) || (n < 0)) {
-			throw new IllegalArgumentException();
+	public static void main(String[] argv) {
+		if (argv.length < 2) {
+			System.err.println("Missing URL");
+			return;
 		}
-		if (m == 0) {
-			return n + 1;
+
+		String spec = argv[1];
+		try {
+			SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+			URL url = new URL(spec);
+			System.out.println("Connecting to " + url.toString() + "...");
+			HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+			connection.setSSLSocketFactory(sslSocketFactory);
+			InputStream is = connection.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+
+			String string = null;
+			while ((string = br.readLine()) != null) {
+			    System.out.println(string);
+			}
+
+			br.close();
+			isr.close();
+			is.close();
 		}
-		if (n == 0) {
-			return a(m - 1, 1);
+		catch (Throwable t) {
+			t.printStackTrace();
 		}
-		return a(m - 1, a(m, n - 1));
-	}
-	
-	public static BigInteger a(BigInteger m, BigInteger n) {
-		if ((m.compareTo(BigInteger.ZERO) < 0) || (n.compareTo(BigInteger.ZERO) < 0)) {
-			throw new IllegalArgumentException();
-		}
-		if (m.equals(BigInteger.ZERO)) {
-			return n.add(BigInteger.ONE);
-		}
-		if (n.equals(BigInteger.ZERO)) {
-			return a(m.subtract(BigInteger.ONE), BigInteger.ONE);
-		}
-		return a(m.subtract(BigInteger.ONE), a(m, n.subtract(BigInteger.ONE)));
 	}
 }
